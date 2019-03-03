@@ -3,14 +3,27 @@
  */
 import React from "react";
 import { renderRoutes } from "react-router-config";
-// import Header from "./components/Header";
-import { fetchCurrentUser } from "./actions/index";
+import Header from "./components/Header";
+import styled from "@emotion/styled";
+import GameContextProvider from "./contexts/GameContext";
 
-const App = ({ route }) => {
-  return <div>{renderRoutes(route.routes)}</div>;
-};
+const Layout = styled.div({
+  paddingLeft: 0,
+  height: "100%",
+  "@media (min-width: 813px)": {
+    paddingLeft: 120
+  }
+});
+
+const App = ({ route, location }: *) => (
+  <GameContextProvider pathname={location.pathname}>
+    <div>
+      <Header />
+      <Layout>{renderRoutes(route.routes)}</Layout>
+    </div>
+  </GameContextProvider>
+);
 
 export default {
-  component: App,
-  loadData: ({ dispatch }) => dispatch(fetchCurrentUser())
+  component: App
 };

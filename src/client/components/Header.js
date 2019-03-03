@@ -1,31 +1,34 @@
-/**
- * Created by Rasmus on 2018-07-04.
- */
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect} from 'react-redux'
+// @flow
+import * as React from "react";
 
-const Header = ( { auth } ) => {
-    console.log("auth status is :" , auth);
-    const authButton = auth ? (
-            <a href="/api/logout">Logout</a>
-        ) : (
-            <a href="/api/auth/google">Login</a>
-        );
-    return (
-      <div>
-          <Link to="/">React SSR</Link>
-          <div>
-              <Link to="/users">Users</Link>
-              <Link to="/adminsen">Admin</Link>
-              { authButton }
-          </div>
-      </div>
-    );
-};
+import styled from "@emotion/styled";
+import { blackBackground } from "../styles/colors";
+import BetTypes from "./BetTypes";
 
-function mapStateToProps( { auth } ) {
-    return { auth };
-}
+const Nav = styled.nav({
+  position: "fixed",
+  width: "100%",
+  height: 50,
+  top: "0",
+  left: "0",
+  bottom: "0",
+  backgroundColor: blackBackground,
+  flexDirection: "row",
+  justifyContent: "center",
+  display: "flex",
+  "@media (min-width: 813px)": {
+    display: "flex",
+    width: 120,
+    flexDirection: "column",
+    height: "unset",
+    justifyContent: "unset"
+  }
+});
 
-export default connect(mapStateToProps)(Header);
+const Header = () => (
+  <Nav>
+    <BetTypes />
+  </Nav>
+);
+
+export default Header;

@@ -1,74 +1,52 @@
 // @flow
 import * as React from "react";
-// import { Formik } from "formik";
 import { blackBackground } from "../styles/colors";
-// import styled from "react-emotion";
+import { header } from "../styles/fonts";
+import GameRace from "../components/GameRace";
 import styled from "@emotion/styled";
 import { GameContext } from "../contexts/GameContext";
+import idx from "idx";
 
 const Container = styled.div({
-  color: "red",
-  backgroundColor: blackBackground,
   display: "flex",
   width: "100%",
-  flex: 1
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  paddingTop: 50,
+  flexDirection: "column",
+  "@media (min-width: 813px)": {
+    paddingTop: 100
+  }
 });
 
-const GamePage = () => {
-  console.log("rendering");
-  let mounted = false;
-  const [gameTypes, setGameTypes] = React.useState([]);
-  const getGameType = () => console.log("yoo");
-
-  React.useEffect(() => {
-    mounted = true;
-    return () => {
-      mounted = false;
-    };
-  }, []);
-  const callApi = (id: *) => console.log("id", id);
-  const checkGameType = (id: *) => {
-    console.log(gameTypes, mounted);
-    if (mounted) {
-      console.log("wow", id.target.name, mounted);
-      if (gameTypes.includes(id.target.name)) {
-        return setGameTypes(
-          gameTypes.filter(gameType => gameType !== id.target.name)
-        );
-      }
-      return setGameTypes([...gameTypes, id.target.name]);
-    }
-  };
-  return (
-    <GameContext.Consumer>
-      {({ selectedGameType }) => (
+const Header = styled.div({
+  ...header,
+  fontSize: 36
+});
+const GamePage = () => (
+  <GameContext.Consumer>
+    {({ data }) => {
+      const betType = idx(data, _ => _.gameinfo.betType);
+      const races = idx(data, _ => _.gamerace.races);
+      return (
         <Container>
-          hola
-          <input
-            type="checkbox"
-            name="V75"
-            onChange={e => selectedGameType(e)}
-          />
-          <input
-            type="checkbox"
-            name="V4"
-            onChange={e => selectedGameType(e)}
-          />
-          <input
-            type="checkbox"
-            name="V64"
-            onChange={e => selectedGameType(e)}
-          />
-          <input
-            type="checkbox"
-            name="V65"
-            onChange={e => selectedGameType(e)}
-          />
+          <Header>{betType && betType}</Header>
+          <div
+            css={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              alignItems: "center"
+            }}
+          >
+            {races && races.map(race => <GameRace key={race.id} race={race} />)}
+          </div>
         </Container>
-      )}
-    </GameContext.Consumer>
-  );
-};
+      );
+    }}
+  </GameContext.Consumer>
+);
 export default {
   component: GamePage
 };

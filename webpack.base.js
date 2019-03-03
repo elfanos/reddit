@@ -8,12 +8,20 @@ module.exports = {
         exclude: /node_modules/,
         options: {
           presets: [
-            "es2015",
-            "react",
-            "stage-0",
-            ["env", { targets: { browsers: ["last 2 versions"] } }]
+            "@babel/preset-env",
+            "@babel/preset-react",
+            "@babel/preset-flow",
+            "@emotion/babel-preset-css-prop"
           ]
         }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: "css-loader"
+          }
+        ]
       }
     ]
   }
