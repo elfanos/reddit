@@ -17,8 +17,20 @@ app.use(function(req, res, next) {
   next();
 });
 
+function handleRedirect(req, res) {
+  res.set("Cache-Control", "public, max-age=0");
+  if (req.originalUrl === "/") {
+    res.redirect("/V75");
+  }
+}
+
 app.use(atgendpoints);
 app.use(express.static("public"));
+
+//redirect to correct index
+app.get("/", (req, res) => {
+  res.redirect("/V75");
+});
 
 app.get("*", (req, res) => {
   const promises = matchRoutes(Routes, req.path)
@@ -34,13 +46,6 @@ app.get("*", (req, res) => {
     const context = {};
     const content = renderer(req, context);
 
-    if (context.url) {
-      /* Set a cache controller so that chrome wont
-             * cache the redirect and create a infinity loop
-             * when user logout*/
-      // res.set("Cache-Control", "public, max-age=0");
-      return res.redirect(301, context.url);
-    }
     if (context.notFound) {
       res.status(404);
     }
