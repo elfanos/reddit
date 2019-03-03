@@ -29,19 +29,29 @@ const GamePage = () => (
     {({ data }) => {
       const betType = idx(data, _ => _.gameinfo.betType);
       const races = idx(data, _ => _.gamerace.races);
+      const error = idx(data, _ => _.error);
       return (
         <Container>
-          <Header>{betType && betType}</Header>
-          <div
-            css={{
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              alignItems: "center"
-            }}
-          >
-            {races && races.map(race => <GameRace key={race.id} race={race} />)}
-          </div>
+          {error ? (
+            <Header css={{ maxWidth: 400, textAlign: "center" }}>
+              {error.response.data.error}
+            </Header>
+          ) : (
+            <React.Fragment>
+              <Header>{betType && betType}</Header>
+              <div
+                css={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                  alignItems: "center"
+                }}
+              >
+                {races &&
+                  races.map(race => <GameRace key={race.id} race={race} />)}
+              </div>
+            </React.Fragment>
+          )}
         </Container>
       );
     }}

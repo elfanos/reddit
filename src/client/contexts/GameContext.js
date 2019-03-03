@@ -86,7 +86,8 @@ export const GameContext = React.createContext<*>({
     gamerace: {
       races: []
     },
-    gameinfo: { betType: [] }
+    gameinfo: { betType: [] },
+    error: ""
   }
 });
 const getLatestRace = (gameRaces: Array<*>) =>
@@ -106,10 +107,16 @@ const GameContextProvider = ({ children, pathname }: *) => {
       .catch(error => dispatch({ type: GET_ERROR, error: error }));
   };
   const getGameRace = async (gameId: string) => {
-    return await axios
-      .get(`atg/games/${gameId}`)
-      .then(res => dispatch({ type: GET_GAMERACE, gamerace: res.data }))
-      .catch(error => dispatch({ type: GET_ERROR, error: error }));
+    try {
+      return await axios
+        .get(`atg/games/${gameId}`)
+        .then(res => dispatch({ type: GET_GAMERACE, gamerace: res.data }))
+        .catch(error =>
+          dispatch({ type: GET_ERROR, error: error.response.data.error })
+        );
+    } catch (error) {
+      return console.log(error);
+    }
   };
   React.useEffect(
     () => {
