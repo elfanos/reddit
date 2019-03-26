@@ -1,7 +1,7 @@
 
 # Project Title
 
-Atg project
+Reddit
 
 ## Getting Started
 
